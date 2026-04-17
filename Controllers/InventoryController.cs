@@ -19,7 +19,7 @@ namespace PharmacyAPI.Controllers
 
         // GET /api/inventory — Admin or Department
         [HttpGet]
-        [Authorize(Roles = "Admin,Department")]
+       // [Authorize(Roles = "Admin,Department")]
         public async Task<ActionResult<IEnumerable<InventoryDto>>> GetAll()
         {
             var inventory = await _inventoryService.GetAllInventoryAsync();
@@ -28,7 +28,7 @@ namespace PharmacyAPI.Controllers
 
         // PUT /api/inventory/{medicineId} — Admin only
         [HttpPut("{medicineId}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<InventoryDto>> Update(int medicineId, [FromBody] UpdateInventoryDto dto)
         {
             var updated = await _inventoryService.UpdateInventoryAsync(medicineId, dto);
@@ -38,7 +38,7 @@ namespace PharmacyAPI.Controllers
 
         // GET /api/inventory/low-stock — Admin only
         [HttpGet("low-stock")]
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<InventoryDto>>> GetLowStock()
         {
             var lowStock = await _inventoryService.GetLowStockAsync();

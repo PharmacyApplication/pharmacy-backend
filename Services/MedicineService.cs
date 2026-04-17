@@ -126,6 +126,17 @@ namespace PharmacyAPI.Services
                 ReorderLevel = inventory?.ReorderLevel ?? 0
             };
         }
+        public async Task<IEnumerable<object>> GetAllCategoriesAsync()
+        {
+            var categories = await _medicineRepository.GetAllCategoriesAsync();
+
+            return categories.Select(c => new
+            {
+                categoryId = c.CategoryId,
+                categoryName = c.CategoryName,
+                description = c.Description
+            });
+        }
     }
 
 }

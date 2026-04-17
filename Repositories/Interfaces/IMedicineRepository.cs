@@ -11,6 +11,7 @@ namespace PharmacyAPI.Repositories.Interfaces
         Task<Medicine> UpdateAsync(Medicine medicine);
         Task<bool> SoftDeleteAsync(int id);
         Task<string> GetCategoryNameAsync(int categoryId);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
     }
 
 }
