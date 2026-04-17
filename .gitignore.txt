@@ -1,0 +1,32 @@
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+
+# Sensitive config files
+appsettings.json
+appsettings.Development.json
+
+# NuGet
+**/[Pp]ackages/*
+*.nupkg
+*.nuget.props
+*.nuget.targets
+
+# Logs
+*.log
+[Ll]ogs/
+
+# Template files (delete these)
+WeatherForecast.cs
+Controllers/WeatherForecastController.cs
+
+# OS files
+.DS_Store
+Thumbs.db
