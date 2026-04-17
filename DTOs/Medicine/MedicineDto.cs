@@ -1,4 +1,5 @@
-﻿namespace PharmacyAPI.DTOs.Medicine
+﻿
+namespace PharmacyAPI.DTOs.Medicine
 {
     public class MedicineDto
     {
@@ -14,6 +15,9 @@
         public DateTime CreatedAt { get; set; }
         public int QuantityInStock { get; set; }
         public int ReorderLevel { get; set; }
+        public bool IsLowStock { get; set; }   // NEW: computed server-side
     }
 
+    
+    
 }
