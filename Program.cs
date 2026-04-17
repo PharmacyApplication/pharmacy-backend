@@ -28,7 +28,7 @@ namespace PharmacyAPI
     ));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
-
+            builder.Services.AddSwaggerGen();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,11 +36,13 @@ namespace PharmacyAPI
             {
                 app.MapOpenApi();
             }
-
+            
             app.UseAuthorization();
-
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.MapControllers();
+
 
             app.Run();
         }
