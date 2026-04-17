@@ -87,3 +87,10 @@ namespace PharmacyAPI.Controllers
     }
 
 }
+
+
+//"Cloudinary": {
+//    "CloudName": "your_cloud_name",
+//  "ApiKey": "your_api_key",
+//  "ApiSecret": "your_api_secret"
+//}
