@@ -20,6 +20,12 @@ namespace PharmacyAPI.DTOs.Medicine
         public bool RequiresPrescription { get; set; } = false;
 
         public string ImageUrl { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int QuantityInStock { get; set; } = 0;   // ← add
+
+        [Range(0, int.MaxValue)]
+        public int ReorderLevel { get; set; } = 10;     // ← add
     }
 
     public class UpdateMedicineDto
@@ -42,6 +48,8 @@ namespace PharmacyAPI.DTOs.Medicine
         public string ImageUrl { get; set; }
 
         public bool IsActive { get; set; }
+
+        
     }
 
 }

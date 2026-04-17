@@ -67,15 +67,15 @@ namespace PharmacyAPI.Services
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             };
-
+            
             var created = await _medicineRepository.CreateAsync(medicine);
 
             // Create initial inventory record with 0 stock
             var inventory = new Inventory
             {
                 MedicineId = created.MedicineId,
-                QuantityInStock = 0,
-                ReorderLevel = 10,
+                QuantityInStock = dto.QuantityInStock,   // ← was 0
+                ReorderLevel = dto.ReorderLevel,
                 LastUpdated = DateTime.UtcNow
             };
             await _inventoryRepository.CreateAsync(inventory);
