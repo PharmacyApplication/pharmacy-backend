@@ -31,6 +31,22 @@ namespace PharmacyAPI.Data
                 .HasOne(c => c.User)
                 .WithOne(u => u.Cart)
                 .HasForeignKey<Cart>(c => c.UserId);
+
+           
+
+            // Seed Department User
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                UserId = 1,
+                FullName = "Admin",
+                Email = "admin@pharmacy.com",
+                PasswordHash = "$2y$11$vpr.RUTqVQuvEZZre4qn6u1mHDJTvv8HgdB61YJ6joELxzl4L98Vy",
+                Role = "Admin",
+                PhoneNumber = "8888888888",
+                Address = "Pharmacy Admin",
+                CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                IsActive = true
+            });
         }
     }
 }

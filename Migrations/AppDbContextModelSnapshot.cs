@@ -349,6 +349,20 @@ namespace PharmacyAPI.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Address = "Pharmacy Admin",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin@pharmacy.com",
+                            FullName = "Admin",
+                            IsActive = true,
+                            PasswordHash = "$2y$11$vpr.RUTqVQuvEZZre4qn6u1mHDJTvv8HgdB61YJ6joELxzl4L98Vy",
+                            PhoneNumber = "8888888888",
+                            Role = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("PharmacyAPI.Models.Cart", b =>
