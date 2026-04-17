@@ -8,7 +8,7 @@
         public int QuantityInStock { get; set; }
         public int ReorderLevel { get; set; }
         public DateTime LastUpdated { get; set; }
-        public bool IsLowStock => QuantityInStock <= ReorderLevel;
+        public bool IsLowStock { get; set; }   // computed: qty < reorderLevel
     }
 
     public class UpdateInventoryDto
