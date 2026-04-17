@@ -1,4 +1,4 @@
-﻿namespace PharmacyAPI.Helper
+﻿namespace PharmacyAPI.Helpers
 {
     public class FileUploadHelper
     {

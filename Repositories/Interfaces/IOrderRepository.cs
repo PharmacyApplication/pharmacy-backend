@@ -2,7 +2,7 @@
 
 namespace PharmacyAPI.Repositories.Interfaces
 {
-    public class IOrderRepository
+    public interface IOrderRepository
     {
         Task<Order> CreateOrderAsync(Order order);
         Task<OrderItem> AddOrderItemAsync(OrderItem orderItem);
