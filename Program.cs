@@ -19,13 +19,11 @@ namespace PharmacyAPI
 
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    ServerVersion.AutoDetect(
-                        builder.Configuration.GetConnectionString("DefaultConnection"))
-                ));
-
-            // JWT
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(
+            builder.Configuration.GetConnectionString("DefaultConnection"))
+    ));
             var jwtKey = builder.Configuration["Jwt:Key"]!;
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -41,10 +39,8 @@ namespace PharmacyAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
                     };
                 });
-
             builder.Services.AddAuthorization();
 
-            // CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngular", policy =>
@@ -52,8 +48,6 @@ namespace PharmacyAPI
                           .AllowAnyHeader()
                           .AllowAnyMethod());
             });
-
-            // Services
             builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
             builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
             builder.Services.AddScoped<IMedicineService, MedicineService>();
@@ -61,11 +55,16 @@ namespace PharmacyAPI
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<JwtHelper>();
+            builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+            builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+            builder.Services.AddScoped<FileUploadHelper>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            builder.Services.AddOpenApi();
 
-            builder.Services.AddControllers();
-
-            
-            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new() { Title = "PharmacyAPI", Version = "v1" });
@@ -106,7 +105,10 @@ namespace PharmacyAPI
             app.UseCors("AllowAngular");
             app.UseAuthentication();
             app.UseAuthorization();
+
+
             app.MapControllers();
+
             app.Run();
         }
     }
