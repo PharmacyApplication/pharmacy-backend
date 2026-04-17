@@ -17,13 +17,18 @@ namespace PharmacyAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Add Controllers (FIXED)
+            builder.Services.AddControllers();
+
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(
-            builder.Configuration.GetConnectionString("DefaultConnection"))
-    ));
+                options.UseMySql(
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    ServerVersion.AutoDetect(
+                        builder.Configuration.GetConnectionString("DefaultConnection"))
+                ));
+
+            // JWT Authentication
             var jwtKey = builder.Configuration["Jwt:Key"]!;
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -39,8 +44,10 @@ namespace PharmacyAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
                     };
                 });
+
             builder.Services.AddAuthorization();
 
+            // CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngular", policy =>
@@ -48,26 +55,33 @@ namespace PharmacyAPI
                           .AllowAnyHeader()
                           .AllowAnyMethod());
             });
+
+            // Repositories
             builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
             builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+            // Services
             builder.Services.AddScoped<IMedicineService, MedicineService>();
             builder.Services.AddScoped<IInventoryService, InventoryService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<JwtHelper>();
-            builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
-            builder.Services.AddScoped<FileUploadHelper>();
-            builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<ICartService, CartService>();
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
 
+            // Helpers
+            builder.Services.AddScoped<JwtHelper>();
+            builder.Services.AddScoped<FileUploadHelper>();
+
+            // Swagger / OpenAPI
+            builder.Services.AddEndpointsApiExplorer(); // optional but recommended
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new() { Title = "PharmacyAPI", Version = "v1" });
+
                 c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -77,25 +91,26 @@ namespace PharmacyAPI
                     In = Microsoft.OpenApi.Models.ParameterLocation.Header,
                     Description = "Enter: Bearer {your token here}"
                 });
+
                 c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
                 {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             var app = builder.Build();
 
-           
+            // Middleware
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -103,9 +118,9 @@ namespace PharmacyAPI
             }
 
             app.UseCors("AllowAngular");
+
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

@@ -10,6 +10,7 @@ namespace PharmacyAPI.Services.Interfaces
         Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto dto);
         Task<MedicineDto> UpdateMedicineAsync(int id, UpdateMedicineDto dto);
         Task<bool> DeleteMedicineAsync(int id);
+        Task<IEnumerable<object>> GetAllCategoriesAsync();
     }
 
 }

@@ -67,6 +67,12 @@ namespace PharmacyAPI.Repositories
             var category = await _context.Categories.FindAsync(categoryId);
             return category?.CategoryName;
         }
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        {
+            return await _context.Categories
+                .OrderBy(c => c.CategoryName)
+                .ToListAsync();
+        }
     }
 
 }
