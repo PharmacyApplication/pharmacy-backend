@@ -17,6 +17,8 @@ namespace PharmacyAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddControllers();
+
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(
@@ -25,7 +27,7 @@ namespace PharmacyAPI
                         builder.Configuration.GetConnectionString("DefaultConnection"))
                 ));
 
-            // JWT
+            // JWT Authentication
             var jwtKey = builder.Configuration["Jwt:Key"]!;
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -53,27 +55,36 @@ namespace PharmacyAPI
                           .AllowAnyMethod());
             });
 
-            // Services
+            // Repositories
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
             builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+            builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IEmailLogRepository, EmailLogRepository>();
+            builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+
+            // Services
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IMedicineService, MedicineService>();
             builder.Services.AddScoped<IInventoryService, InventoryService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+            builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderStatusService, OrderStatusService>();
-            builder.Services.AddScoped<IEmailLogRepository, EmailLogRepository>();
             builder.Services.AddScoped<IEmailService, EmailService>();
-            builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+
+            // Helpers
             builder.Services.AddScoped<JwtHelper>();
+            builder.Services.AddScoped<FileUploadHelper>();
 
-            builder.Services.AddControllers();
-
-            
+            // Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new() { Title = "PharmacyAPI", Version = "v1" });
+
                 c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -83,25 +94,25 @@ namespace PharmacyAPI
                     In = Microsoft.OpenApi.Models.ParameterLocation.Header,
                     Description = "Enter: Bearer {your token here}"
                 });
+
                 c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
                 {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             var app = builder.Build();
 
-           
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
