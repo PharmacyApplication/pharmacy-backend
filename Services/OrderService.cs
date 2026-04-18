@@ -16,14 +16,14 @@ namespace PharmacyAPI.Services
         private readonly IOrderRepository _orderRepository;
         private readonly ICartRepository _cartRepository;
         private readonly IInventoryRepository _inventoryRepository; // Injected from Module 2
-     //   private readonly IEmailService _emailService;              // Injected from Module 4 — not implemented here
+        private readonly IEmailService _emailService;              // Injected from Module 4 — not implemented here
         private readonly AppDbContext _context;                    // Used to load user details for email
 
         public OrderService(
             IOrderRepository orderRepository,
             ICartRepository cartRepository,
             IInventoryRepository inventoryRepository,
-         //   IEmailService emailService,
+            IEmailService emailService,
             AppDbContext context)
         {
             _orderRepository = orderRepository;
@@ -86,7 +86,7 @@ namespace PharmacyAPI.Services
             var user = await _context.Users.FindAsync(userId);
             if (user != null)
             {
-              //  await _emailService.SendOrderConfirmationAsync(user, createdOrder);
+                await _emailService.SendOrderConfirmationAsync(user, createdOrder);
             }
 
             // Return full order DTO
