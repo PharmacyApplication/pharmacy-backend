@@ -17,7 +17,6 @@ namespace PharmacyAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add Controllers (FIXED)
             builder.Services.AddControllers();
 
             // Database
@@ -57,27 +56,31 @@ namespace PharmacyAPI
             });
 
             // Repositories
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
             builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IEmailLogRepository, EmailLogRepository>();
+            builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
 
             // Services
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IMedicineService, MedicineService>();
             builder.Services.AddScoped<IInventoryService, InventoryService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IOrderStatusService, OrderStatusService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             // Helpers
             builder.Services.AddScoped<JwtHelper>();
             builder.Services.AddScoped<FileUploadHelper>();
 
-            // Swagger / OpenAPI
-            builder.Services.AddEndpointsApiExplorer(); // optional but recommended
+            // Swagger
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new() { Title = "PharmacyAPI", Version = "v1" });
@@ -110,7 +113,6 @@ namespace PharmacyAPI
 
             var app = builder.Build();
 
-            // Middleware
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -118,12 +120,9 @@ namespace PharmacyAPI
             }
 
             app.UseCors("AllowAngular");
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
-
             app.Run();
         }
     }
