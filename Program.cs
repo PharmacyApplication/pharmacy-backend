@@ -60,6 +60,11 @@ namespace PharmacyAPI
             builder.Services.AddScoped<IInventoryService, InventoryService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+            builder.Services.AddScoped<IOrderStatusService, OrderStatusService>();
+            builder.Services.AddScoped<IEmailLogRepository, EmailLogRepository>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
             builder.Services.AddScoped<JwtHelper>();
 
             builder.Services.AddControllers();
