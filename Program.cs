@@ -54,14 +54,17 @@ namespace PharmacyAPI
             builder.Services.AddScoped<IInventoryService, InventoryService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<JwtHelper>();
+           
             builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
-            builder.Services.AddScoped<FileUploadHelper>();
+           
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+
+            builder.Services.AddScoped<FileUploadHelper>();
+            builder.Services.AddScoped<JwtHelper>();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
@@ -92,7 +95,7 @@ namespace PharmacyAPI
         }
     });
             });
-
+            builder.Services.AddControllers();
             var app = builder.Build();
 
            
